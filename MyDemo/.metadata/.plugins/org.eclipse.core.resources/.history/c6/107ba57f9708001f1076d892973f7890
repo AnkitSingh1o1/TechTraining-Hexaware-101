@@ -1,0 +1,32 @@
+package com.service;
+
+import java.sql.SQLException;
+
+import com.dao.IBankServiceProvider;
+import com.dao.IBankServiceProviderImpl;
+import com.model.Account;
+import com.model.Address;
+import com.model.Customer;
+
+public class IBankService {
+
+	IBankServiceProvider dao = new IBankServiceProviderImpl();
+	
+	public int createAccount(Account account) throws SQLException {
+		return dao.createAccount(account);
+	}
+
+	public int createCustomer(Customer customer) throws SQLException {
+		return dao.createCustomer(customer);
+	}
+
+	public int createAddress(Address address) throws SQLException {
+		return dao.createAddress(address);
+	}
+
+	public float calculateInterest(long accountNumber) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+}

@@ -1,0 +1,48 @@
+package com.service;
+
+import java.sql.SQLException;
+
+import com.dao.ICustomerServiceProvider;
+import com.dto.AccountAndCustomer;
+import com.exception.InsufficientFundException;
+import com.exception.InvalidAccountException;
+import com.exception.OverDraftLimitExcededException;
+import com.model.Account;
+
+public class ICustomerService {
+
+	ICustomerServiceProvider dao = new ICustomerServiceProvider() {
+		
+		@Override
+		public int withdraw(long accountNumber, float amount)
+				throws SQLException, InvalidAccountException, InsufficientFundException, OverDraftLimitExcededException {
+			return dao.withdraw(accountNumber, amount);
+		}
+		
+		@Override
+		public int transfer(long from_account_no, long to_account_no, float amount)
+				throws SQLException, InvalidAccountException, InsufficientFundException, OverDraftLimitExcededException {
+			return dao.transfer(from_account_no, to_account_no, amount);
+		}
+		
+		@Override
+		public Account getDetails(long accountNumber) throws SQLException, InvalidAccountException {
+			return dao.getDetails(accountNumber);
+		}
+		
+		@Override
+		public AccountAndCustomer getAccountDetails(long accountNumber) throws SQLException, InvalidAccountException {
+			return dao.getAccountDetails(accountNumber);
+		}
+		
+		@Override
+		public float getAccountBalance(long accountNumber) throws SQLException, InvalidAccountException {
+			return dao.getAccountBalance(accountNumber);
+		}
+		
+		@Override
+		public int deposit(long accountNumber, float amount) throws SQLException, InvalidAccountException {
+			return deposit(accountNumber, amount);
+		}
+	};
+}

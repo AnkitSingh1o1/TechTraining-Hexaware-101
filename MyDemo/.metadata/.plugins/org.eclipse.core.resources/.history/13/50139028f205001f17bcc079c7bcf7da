@@ -1,0 +1,10 @@
+package com.dao;
+
+import com.model.Policy;
+
+public interface ClientDao {
+
+	public Policy getMyPolicy();
+	public int buyPolicy();
+	public int saveClaim();
+}

@@ -1,0 +1,16 @@
+package com.dao;
+
+import java.sql.SQLException;
+
+import com.exception.InsufficientFundException;
+import com.exception.InvalidAccountException;
+import com.model.Customer;
+
+public interface ICustomerServiceProvider {
+
+	float getAccountBalance(long accountNumber) throws SQLException, InvalidAccountException;
+	float deposit(long accountNumber, float amount)throws SQLException, InvalidAccountException;
+	float withdraw(long accountNumber, float amount)throws SQLException, InvalidAccountException, InsufficientFundException;
+	int transfer(long from_account_no, long to_account_no, float amount) throws SQLException, InvalidAccountException, InsufficientFundException, ;
+	Customer getAccountDetails(long account_no);
+}

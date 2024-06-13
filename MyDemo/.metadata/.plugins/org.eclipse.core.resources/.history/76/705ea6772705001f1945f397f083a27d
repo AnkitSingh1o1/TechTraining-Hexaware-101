@@ -1,0 +1,8 @@
+package com.dao;
+
+import com.model.Customer;
+
+public interface IBankServiceProvider {
+
+	int createAccount(Customer customer, long accNo, String accType, float balance);
+}

@@ -1,0 +1,20 @@
+package com.dao;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import com.model.Account;
+import com.model.Address;
+import com.model.Customer;
+
+public interface IBankServiceProvider {
+
+	int createCustomer(Customer customer) throws SQLException;
+	int createAddress(Address address) throws SQLException;
+	int createAccount(Account account) throws SQLException;
+	
+	List<Account> listAccounts() throws SQLException;
+	float calculateInterest() throws SQLException;
+	
+
+}

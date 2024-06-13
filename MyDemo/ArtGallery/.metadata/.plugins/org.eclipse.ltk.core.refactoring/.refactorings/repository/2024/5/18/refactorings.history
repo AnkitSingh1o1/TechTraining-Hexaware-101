@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;DBConnection.java&apos; to &apos;CarConnect/src/com.utility&apos;&#x0A;- Original project: &apos;repository&apos;&#x0A;- Destination element: &apos;CarConnect/src/com.utility&apos;&#x0A;- Original element: &apos;DBConnection.java&apos;" description="Copy file" destination="=CarConnect/src&lt;com.utility" element1="CarConnect/src/com/utility/DBConnection.java" files="1" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1714586659886" units="0" version="1.0"/>
+</session>

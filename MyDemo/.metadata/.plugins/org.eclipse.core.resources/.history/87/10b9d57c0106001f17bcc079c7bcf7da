@@ -1,0 +1,16 @@
+package com.dao;
+
+import java.sql.SQLException;
+
+import com.exception.PolicyNotFoundException;
+import com.model.Claim;
+
+public class ClientDaoImpl implements ClaimDao{
+
+	@Override
+	public boolean createClaim(Claim claim) throws SQLException, PolicyNotFoundException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

@@ -1,0 +1,22 @@
+package com.service;
+
+import com.dao.UserDao;
+import com.model.User;
+
+public class UserService {
+
+	UserDao userDao = new UserDao();
+	
+	public User login(String username, String password) {
+		
+		User loginUser = userDao.login(username, password);
+		
+		//if the any of the entered credentials are incorrect it throws an InvalidCredentialException
+		if(loginUser == null) {
+			throw new InvalidInputException("Invalid Credentials");
+		}
+		
+		return loginUser;
+	}
+
+}

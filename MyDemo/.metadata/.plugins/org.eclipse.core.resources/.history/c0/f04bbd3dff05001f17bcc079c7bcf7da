@@ -1,0 +1,15 @@
+package com.controller;
+
+public class ClientController {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public static void clientMenu(String username, String password) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

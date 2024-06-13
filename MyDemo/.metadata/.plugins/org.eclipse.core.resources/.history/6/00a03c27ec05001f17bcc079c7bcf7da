@@ -1,0 +1,69 @@
+package com.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
+
+import com.exception.PolicyNotFoundException;
+import com.model.Policy;
+import com.utility.DBConnection;
+
+public class PolicyDaoImpl implements PolicyDao{
+
+	@Override
+	public boolean createPolicy(Policy policy) throws SQLException, PolicyNotFoundException {
+		// open connection
+		Connection con = DBConnection.dbConnect();
+
+		String sql = "insert into policy(policy_id, policy_name, policy_cost) "
+				+ "values (?, ?, ?)";
+
+		// prepare statement
+		PreparedStatement pstmt = con.prepareStatement(sql);
+
+		// attach the data
+		pstmt.setInt(1, reservation.getReservation_id());
+		pstmt.setString(2, reservation.getReservation_start_date());
+		pstmt.setString(3, reservation.getReservation_end_date());
+		pstmt.setDouble(4, reservation.getReservation_total_cost());
+		pstmt.setString(5, reservation.getReservation_status());
+		pstmt.setInt(6, reservation.getCustomer_id());
+		pstmt.setInt(7, reservation.getVehicle_id());
+		pstmt.setInt(8, reservation.getAdmin_id());
+
+		// execute the query
+		int status = pstmt.executeUpdate();
+
+		// close db connection
+		DBConnection.dbClose();
+
+		return status;
+
+	}
+
+	@Override
+	public Policy getPolicy(int policyId) throws SQLException, PolicyNotFoundException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Policy> getAllPolicies() throws SQLException, PolicyNotFoundException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean updatePolicy(Policy updatedPolicy) throws SQLException, PolicyNotFoundException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean deletePolicy(int policyId) throws SQLException, PolicyNotFoundException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

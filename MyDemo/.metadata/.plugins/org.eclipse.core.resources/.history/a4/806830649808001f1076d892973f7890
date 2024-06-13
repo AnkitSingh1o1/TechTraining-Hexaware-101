@@ -1,0 +1,153 @@
+package com.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+
+import com.dto.AccountAndCustomer;
+import com.exception.InsufficientFundException;
+import com.exception.InvalidAccountException;
+import com.exception.OverDraftLimitExcededException;
+import com.model.Account;
+
+import com.utility.DBConnection;
+
+public class ICustomerServiceProviderImpl implements ICustomerServiceProvider{
+
+	@Override
+	public float getAccountBalance(long accountNumber) throws SQLException, InvalidAccountException {
+		Connection con = DBConnection.dbConnect();
+		String sql = "select account_balance from account where account_id = ?";
+		PreparedStatement pstmt = con.prepareStatement(sql);
+		pstmt.setLong(1, accountNumber);
+
+		ResultSet rst = pstmt.executeQuery();
+		
+		float balance = 0;
+		if(rst.next())
+			balance = rst.getFloat("account_balance");
+		else 
+			throw new InvalidAccountException("Account Id not found");
+		
+		
+		DBConnection.dbClose();
+		return balance;
+	}
+	
+
+	@Override
+	public int deposit(long accountNumber, float amount) throws SQLException, InvalidAccountException {
+		Connection con = DBConnection.dbConnect();
+		
+		//get current amount in that account
+		float currAmount = getAccountBalance(accountNumber);
+		
+		
+		String sql = "update account " 
+		+ "set account_balance = ? "
+		+"where account_id = ?";
+
+		// prepare statement
+		PreparedStatement pstmt = con.prepareStatement(sql);
+		pstmt.setFloat(1, amount+currAmount);
+		pstmt.setFloat(2, accountNumber);
+		
+		int status = pstmt.executeUpdate(); // 1 - updates/ 0 - not updated
+
+		DBConnection.dbClose();
+		return status;
+		
+	}
+	
+
+	@Override
+	public int withdraw(long accountNumber, float amount)
+			throws SQLException, InvalidAccountException, InsufficientFundException, OverDraftLimitExcededException {
+		Connection con = DBConnection.dbConnect();
+		
+		//get current amount in that account
+		float currAmount = getAccountBalance(accountNumber);
+		
+		Account account = getDetails(accountNumber);
+		
+		
+		if(account.getAccount_type().equals("current"))
+		throw new OverDraftLimitExcededException("Cannot withdraw from current account");
+		
+		if(currAmount < amount) 
+		throw new InsufficientFundException("Sorry, Insufficient Balance");
+		
+		
+		String sql = "update account " 
+		+ "set account_balance = ? "
+		+"where account_id = ?";
+
+		// prepare statement
+		PreparedStatement pstmt = con.prepareStatement(sql);
+		pstmt.setFloat(1, currAmount-amount);
+		pstmt.setFloat(2, accountNumber);
+		
+		int status = pstmt.executeUpdate(); // 1 - updates/ 0 - not updated
+
+		DBConnection.dbClose();
+		return status;
+	}
+
+
+	@Override
+	public Account getDetails(long accountNumber) throws SQLException {
+		Connection con = DBConnection.dbConnect();
+		String sql = "select * from Account where account_id = ?";
+		PreparedStatement pstmt = con.prepareStatement(sql);
+		pstmt.setLong(1, accountNumber);
+
+		ResultSet rst = pstmt.executeQuery();
+		
+		Account account = null;
+		if(rst.next()) {
+			int id = rst.getInt("account_id");
+			String type = rst.getString("account_type");
+			double balance = rst.getDouble("account_balance");
+			int cId = rst.getInt("customer_id");
+			account = new Account(id, type, balance, cId);
+		}
+		else {
+			System.out.println("ResultSet is empty");
+		}
+		DBConnection.dbClose();
+		return account;
+	}
+
+	@Override
+	public AccountAndCustomer getAccountDetails(long accountNumber) throws SQLException {
+		
+		Connection con = DBConnection.dbConnect();
+		String sql = "select * from account a join customer c where account_id = ?";
+		PreparedStatement pstmt = con.prepareStatement(sql);
+		pstmt.setLong(1, accountNumber);
+
+		ResultSet rst = pstmt.executeQuery();
+		AccountAndCustomer accountAndCustomer = null;
+		if(rst.next()) {
+			int account_id = rst.getInt("account_id");
+			String account_type = rst.getString("account_type");
+			double account_balance = rst.getDouble("account_balance");
+			int customer_id = rst.getInt("customer_id");
+			String customer_first_name = rst.getString("customer_first_name");
+			String customer_last_name = rst.getString("customer_last_name");
+			String customer_dob = rst.getString("customer_dob");
+		
+			accountAndCustomer = new AccountAndCustomer(account_id,
+				account_type, account_balance, customer_id, customer_first_name, 
+				customer_last_name, customer_dob);
+		}
+		else {
+			System.out.println("ResultSet is empty");
+		}
+		DBConnection.dbClose();
+		return accountAndCustomer;
+	}
+
+}

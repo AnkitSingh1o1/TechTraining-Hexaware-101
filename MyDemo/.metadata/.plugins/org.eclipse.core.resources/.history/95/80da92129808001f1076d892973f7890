@@ -1,0 +1,36 @@
+package com.service;
+
+import java.sql.SQLException;
+
+import com.dao.IBankServiceProvider;
+import com.dao.IBankServiceProviderImpl;
+import com.exception.InvalidAccountException;
+import com.exception.OverDraftLimitExcededException;
+import com.model.Account;
+import com.model.Address;
+import com.model.Customer;
+
+public class IBankService {
+
+	IBankServiceProvider bankDao = new IBankServiceProviderImpl();
+	ICustomerService customerDao = new ICustomerService();
+	
+	public int createAccount(Account account) throws SQLException {
+		return bankDao.createAccount(account);
+	}
+
+	public int createCustomer(Customer customer) throws SQLException {
+		return bankDao.createCustomer(customer);
+	}
+
+	public int createAddress(Address address) throws SQLException {
+		return bankDao.createAddress(address);
+	}
+
+	public float calculateInterest(long accountNumber) throws SQLException, InvalidAccountException {
+		Account account = customerDao.getDetails(accountNumber);
+		if(account.getAccount_type().equals("current"))
+			throw new OverDraftLimitExcededException("Cannot withdraw from current account");
+	}
+
+}

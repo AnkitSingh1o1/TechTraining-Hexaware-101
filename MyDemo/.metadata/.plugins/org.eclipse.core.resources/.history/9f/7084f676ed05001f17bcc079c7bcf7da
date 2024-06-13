@@ -1,0 +1,11 @@
+package com.service;
+
+public class AdminService {
+
+	Admindao dao = new AdminDaoImpl();
+	
+	public String getAdminIdByUsernamePassword(String username, String password) {
+		return dao.getVendorIdByUsernamePassword(username, password);
+	}
+
+}

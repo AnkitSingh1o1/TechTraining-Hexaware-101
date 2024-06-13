@@ -1,0 +1,36 @@
+package com.dao;
+
+import java.sql.SQLException;
+
+import com.exception.PolicyNotFoundException;
+import com.model.Claim;
+import com.utility.DBConnection;
+
+public class ClientDaoImpl implements ClaimDao{
+
+	@Override
+	public boolean createClaim(Claim claim) throws SQLException, PolicyNotFoundException {
+		Connection  con = DBConnection.dbConnect();
+		String sql = "SELECT * FROM user WHERE user_username = ? AND user_password = ?";
+		PreparedStatement pstmt = con.prepareStatement(sql);
+		
+		pstmt.setString(1,username);
+		pstmt.setString(2,password);
+		ResultSet rst = pstmt.executeQuery();
+		if(rst.next()) {
+			User user = new User();
+			user.setUserId(rst.getInt("user_id"));
+			user.setUserName(username);
+			user.setUserPassword(password);   // password should not be displayed on the admin page menu console
+			user.setUserRole(rst.getString("user_role"));
+			DBConnection.dbClose();
+			return user;
+		}
+		else {
+			DBConnection.dbClose();
+			return null;
+		}
+
+	}
+
+}

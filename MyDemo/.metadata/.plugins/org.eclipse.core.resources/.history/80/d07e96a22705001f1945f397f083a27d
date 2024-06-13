@@ -1,0 +1,13 @@
+package com.dao;
+
+import java.util.List;
+
+import com.model.Account;
+import com.model.Customer;
+
+public interface IBankServiceProvider {
+
+	int createAccount(Customer customer, long accNo, String accType, float balance);
+	List<Account> listAccounts();
+	float calculateInterest();
+}

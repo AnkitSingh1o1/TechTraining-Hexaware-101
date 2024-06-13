@@ -1,0 +1,35 @@
+package com.controller;
+
+import java.util.Scanner;
+
+import com.model.User;
+
+public class MainModule {
+
+	public static void main(String[] args) {
+		
+		Scanner sc = new Scanner(System.in);
+		
+		boolean loggedIn = false;
+		while(!loggedIn)
+		System.out.println("Login");
+		System.out.println("Enter username:");
+		String username = sc.next();
+		System.out.println("Enter password:");
+		String password = sc.next();
+		
+		User userLogin = loginService.login(username, password);
+		loggedIn = true; // On logging in loggedIn is set to true
+
+		if (userLogin.getUserRole().equalsIgnoreCase("client")) {
+			ClientController.clientMenu(username, password);
+		}
+
+		else if (userLogin.getUserRole().equalsIgnoreCase("admin")) {
+			 AdminController.adminMenu(username, password);
+		}
+
+		
+	}
+
+}

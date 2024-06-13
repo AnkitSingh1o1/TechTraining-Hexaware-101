@@ -1,0 +1,11 @@
+package com.service;
+
+import com.dao.PolicyDao;
+import com.dao.PolicyDaoImpl;
+
+public class PolicyService {
+
+	PolicyDao dao = new PolicyDaoImpl();
+	
+	
+}

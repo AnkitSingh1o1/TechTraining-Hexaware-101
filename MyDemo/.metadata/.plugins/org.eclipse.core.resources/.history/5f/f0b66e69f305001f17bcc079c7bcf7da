@@ -1,0 +1,41 @@
+package com.controller;
+
+import java.sql.SQLException;
+
+import com.exception.ResourceNotFoundException;
+import com.service.AdminService;
+
+
+public class AdminController {
+
+	public static void main(String[] args) {
+		
+		while(true) {
+			System.out.println("      Welcome Admin");
+			System.out.println("-------------------------- ");
+			System.out.println("1. Create Policy");
+			System.out.println("2. Get a Policy");
+			System.out.println("3. Get All Policy");
+			System.out.println("4. Update Policy");
+			System.out.println("5. Delete Policy");
+			System.out.println("0. Exit");
+		}
+	}
+
+	public static void adminMenu(String username, String password) {
+		AdminService adminService = new AdminService();
+		
+			
+			try {
+				int adminId = adminService.getAdminIdByUsernamePassword(username, 
+						password);
+			} catch (SQLException | ResourceNotFoundException e) {
+				System.out.println(e.getMessage());
+			}
+			
+			String[] sarr = { "adminId" };
+			main(sarr);
+		
+	}
+
+}

@@ -1,0 +1,26 @@
+package com.controller;
+
+import java.sql.SQLException;
+import com.service.AdminService;
+
+
+public class AdminController {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public static void adminMenu(String username, String password) {
+		AdminService adminService = new AdminService();
+		
+			
+			int adminId = adminService.getAdminIdByUsernamePassword(username, 
+					password);
+			
+			String[] sarr = { "adminId" };
+			main(sarr);
+		
+	}
+
+}

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="java.lang.Comparable"/>
+    <fullyQualifiedTypeName name="java.util.Comparator"/>
+    <fullyQualifiedTypeName name="java.util.Collections"/>
+    <fullyQualifiedTypeName name="com.dto.VendorAndCount"/>
+    <fullyQualifiedTypeName name="java.lang.Exception"/>
+    <fullyQualifiedTypeName name="com.exception.ReservationException"/>
+    <fullyQualifiedTypeName name="com.dao.VehicleDaoImpl"/>
+    <fullyQualifiedTypeName name="com.dao.VehicleDao"/>
+    <fullyQualifiedTypeName name="com.service.VehicleService"/>
+    <fullyQualifiedTypeName name="com.dao.CustomerDaoImpl"/>
+    <fullyQualifiedTypeName name="com.dao.VendorDaoImpl"/>
+    <fullyQualifiedTypeName name="com.exception.ResourceNotFoundException"/>
+    <fullyQualifiedTypeName name="com.exception.DatabaseConnectionException"/>
+    <fullyQualifiedTypeName name="com.model.Address"/>
+    <fullyQualifiedTypeName name="com.options.VendorOptions"/>
+</qualifiedTypeNameHistroy>

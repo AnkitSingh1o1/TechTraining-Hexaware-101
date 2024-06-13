@@ -1,0 +1,193 @@
+package com.controller;
+
+import java.sql.SQLException;
+import java.util.*;
+
+import com.dto.AccountAndCustomer;
+import com.exception.InsufficientFundException;
+import com.exception.InvalidAccountException;
+import com.exception.OverDraftLimitExcededException;
+import com.model.Account;
+import com.model.Address;
+import com.model.Customer;
+import com.service.AccountService;
+import com.service.AddressService;
+import com.service.CustomerService;
+import com.service.ICustomerService;
+import com.utility.RandomId;
+
+public class BankController {
+
+	public static void main(String[] args) {
+		
+		Scanner sc = new Scanner(System.in);
+		CustomerService customerService = new CustomerService();
+		AccountService accountService = new AccountService();
+		AddressService addressService = new AddressService();
+		ICustomerService iCustomerService = new ICustomerService();
+		
+		
+		while(true) {
+			System.out.println("           Bank");
+			System.out.println("-------------------------");
+		
+			System.out.println("1. Create Account");
+			System.out.println("2. Get account Balance");
+			System.out.println("3. Deposit");
+			System.out.println("4. Withdraw");
+			System.out.println("5. Transfer");
+			System.out.println("6. Get Account Details");
+			System.out.println("0. Exit");
+		
+			int choice = sc.nextInt();
+			switch(choice) {
+			case 1:
+				try {
+				System.out.println("Enter Customer Details:");
+				
+				System.out.println("First Name:");
+				String fName = sc.next();
+				System.out.println("Last Name:");
+				String lName = sc.next();
+				System.out.println("Date of Birth:");
+				String dob = sc.next();
+				
+				int customerId = RandomId.getRandomId();
+				Customer customer = new Customer(customerId, fName, lName, dob);
+				int s1 = customerService.save(customer);
+				
+				System.out.println("Enter Address Details:");
+				System.out.println("State:");
+				String state = sc.next();
+				System.out.println("City:");
+				String city = sc.next();
+				System.out.println("Pincode:");
+				int pincode = sc.nextInt();
+				
+				int addressId = RandomId.getRandomId();
+				Address address = new Address(addressId, state, city, pincode, customerId);
+				int s2 = addressService.save(address);
+				
+				System.out.println("Enter Account Details:");
+				System.out.println("Account Type:");
+				String type = sc.next();
+				System.out.println("Account Balance:");
+				double amount = sc.nextDouble();
+				
+				int accountId = RandomId.getRandomId();
+				Account account = new Account(accountId, type, amount, customerId);
+				int s3 = accountService.save(account);
+				
+				if(s1 == 1 & s2 == 1 & s3 == 1) {
+					System.out.println("Customer Added Sucessfully");
+				}
+				}catch (Exception e) {
+					System.out.println(e.getMessage());
+				}
+				break;
+				
+			case 2:
+				System.out.println("Enter account Number:");
+				long accountNumber = sc.nextLong();
+				float amount = 0;
+				try {
+					amount = iCustomerService.getAccountBalance(accountNumber);
+				} catch (SQLException | InvalidAccountException e) {
+					System.out.println(e.getMessage());
+				}
+				System.out.println("Account Balance: ");
+				System.out.println(amount);
+				System.out.println();
+				break;
+				
+			case 3:
+				System.out.println("Enter account Number:");
+				long accountNumber1 = sc.nextLong();
+				System.out.println("Enter Amount to deposit:");
+				float amount1 = sc.nextFloat();
+				
+				int status = 0;
+				try {
+					status = iCustomerService.deposit(accountNumber1, amount1);
+				} catch (SQLException | InvalidAccountException e) {
+					System.out.println(e.getMessage());
+				}
+				
+				if(status == 1)
+					System.out.println("Amount Deposited Sucessfully");
+				else
+					System.out.println("Deposit failed!!");
+
+				break;
+				
+			case 4:
+				
+				System.out.println("Enter account Number:");
+				long accountNumber11 = sc.nextLong();
+				System.out.println("Enter Amount to withdraw:");
+				float amount11 = sc.nextFloat();
+				
+				int status1 = 0;
+				try {
+					try {
+						status1 = iCustomerService.withdraw(accountNumber11, amount11);
+					} catch (InsufficientFundException | OverDraftLimitExcededException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} catch (SQLException | InvalidAccountException e) {
+					System.out.println(e.getMessage());
+				}
+				
+				if(status1 == 1)
+					System.out.println("Amount Withdrawed Sucessfully");
+				else
+					System.out.println("Withdraaw failed!!");
+
+				break;
+				
+			case 5:
+				System.out.println("Enter from account Number:");
+				long accountNumber111 = sc.nextLong();
+				System.out.println("Enter to account Number:");
+				long accountNumber112 = sc.nextLong();
+				System.out.println("Enter Amount to transfer:");
+				float amount111 = sc.nextFloat();
+				
+				int status11 = 0;
+				try {
+					try {
+						status11 = iCustomerService.transfer(accountNumber111, accountNumber112, amount111);
+					} catch (InsufficientFundException | OverDraftLimitExcededException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} catch (SQLException | InvalidAccountException e) {
+					System.out.println(e.getMessage());
+				}
+				
+				if(status11 == 1)
+					System.out.println("Amount Transfered Sucessfully");
+				else
+					System.out.println("Transfer failed!!");
+
+				break;
+				
+			case 6:
+				System.out.println("Enter account Number:");
+				long accountNumber1111 = sc.nextLong();
+		
+				try {
+					AccountAndCustomer details = iCustomerService.getAccountDetails(accountNumber1111);
+					System.out.println(details);
+				} catch (SQLException | InvalidAccountException e) {
+					System.out.println(e.getMessage());
+				}
+				
+				System.out.println();
+				break;
+			}
+		}
+	}
+
+}

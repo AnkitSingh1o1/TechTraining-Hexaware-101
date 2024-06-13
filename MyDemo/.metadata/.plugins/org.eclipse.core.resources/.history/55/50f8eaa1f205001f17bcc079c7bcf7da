@@ -1,0 +1,12 @@
+package com.dao;
+
+import java.sql.SQLException;
+
+import com.exception.PolicyNotFoundException;
+import com.model.Policy;
+
+public interface ClaimDao {
+
+	public boolean createClaim(Policy policy) throws SQLException, 
+	PolicyNotFoundException;
+}

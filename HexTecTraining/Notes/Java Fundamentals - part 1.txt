@@ -1,0 +1,285 @@
+Java Fundamentals 
+=================
+
+Class and Method Access Specifiers
+
+- A class has 2 access specifiers 
+1. public : if a class is public, it can be accessed from all packages 
+2. default : if it is default, it can be accessed from within its own package 
+
+Programmer Tip: 
+a. Accessing a class means creating an Object 
+b. Always make sure that the class is public. keep it accesible to controllers. 
+
+- A method has 4 access specifiers 
+1. public : if the method is public, it can be called/accessed from the controller. 
+2. protected: if it is protected, it can be accessed from controler using sub-class object. So this is for inheritance. 
+3. default : if it is default, it can be accessed only within the same package 
+4. private : if it is private, it can be access only within same class
+
+Programmer Tip: 
+a. Always keep methods as public.  
+
+Creating an Object of a class 
+------------------------------
+BankService bankService = new BankService();
+
+BankService bankService: this is called as reference/variable/object
+new BankService() : Object 
+
+Working with Instance Variables
+===============================
+1. We create instance variables in class according to the attributes in DB table. 
+
+ex. 
+DB Table: 
+product(id,title,price,description)
+Java Model class: 
+public class Product {
+//id,title,price,description
+	private int id;
+	private String title;
+	private double price;
+	private String description;
+}
+
+2. We mark all variables as private to clamp down on any direct access. 
+ex. product.title   NOT ALLOWED 
+
+3. We offer getter and setter methods for these variables for controller and service 
+product.setId(1);
+product.getPrice()
+[Note: getters and setters can be auto-generated]
+
+
+How to work with model classes in Controller and Service
+--------------------------------------------------------
+Controller prepares the object and passes it on to the service class. 
+
+ex. 
+		//preparing the object
+		Product product = new Product();
+		product.setId(1);
+		product.setPrice(34000);
+		product.setTitle("Oppo Mobile");
+		product.setDescription("jkdjkj");
+
+		//pass it on to service 
+		product = productService.computeDiscount(product,discount);
+
+
+How does JVM maintain multiple objects in its Memory
+====================================================
+
+Stack 					Heap 
+-----
+Student student1:100X		100X:StudentObj:int(id):1  String(name):harry potter  int(age):21  double(percent):75.0
+Student student2:200X		200X:StudentObj:int(id):2  String(name):ronald weasley  int(age):22  double(percent):75.0
+Student student3:300X		300X:StudentObj:int(id):3  String(name):hermione granger  int(age):21  double(percent):90.0
+				400X:
+
+
+Rule: References go in the stack, objects go in the heap 
+
+Inheritance 
+===========
+- Suppose that you have class created in your project few months back. Now the requirement is to add some fields in that class. 
+
+ex. 
+class Product{  //created few months back 
+  int id; 
+  double price; 
+  String description; 
+}
+
+on the basis of this model, objects are present in the project 
+
+Now the new requirements wants us to add a field of rating in this class. 
+there are 2 ways to do this. 
+
+a. Alter the existing class, but problem is there are many objects already present in the project. So altering all of them would not be recommended. 
+b. Create a class(say ProductV1) and extend it with Product(Original class). This is called as inheritance. 
+
+class ProductV1 extends Product{
+  //all variables and methods of Product class come to ProductV1. 
+ 
+ int rating;  
+}
+
+Q. So how many variables productV1 has? 
+A: 4 variables. 
+Q. Do we have to change tProduct class Object in the project? 
+A: No
+Q. If you want to work with Product class henceforth in your project which class will you work with? 
+A: ProductV1
+
+terminologies: 
+-------------
+Product: super class 
+ProductV1: sub class 
+
+Q. Lets say after few months, a new requirement wants us to create 'productWeight' variable in ProductV1 class. What would you do?
+A: We will create ProductV2 class that will extend ProductV1
+
+class ProductV2 extends ProductV1{ }
+
+
+Overriding the methods
+======================
+suppose that we have following class structure. 
+
+class Animal{
+   public void animalInstinct() { sysout("Animal Instinct")}
+}
+
+class Dog extends Animal {
+ 
+}
+
+Q. How many methods Dog sub-class has? 
+A: 1 (animalInstinct())
+
+Q. If i create an object of Sub class and call the method then, what will be the output?
+
+Dog dog = new Dog();
+dog.animalInstinct(); //Animal Instinct
+
+Q. what if I am not happy with the implementation of animalInstinct() method in the super class? what should I do? 
+A: I am not going to change or edit super class. Thats a Blunder!!!!!!!!  Instead I am going to re-implement that method in subclass. 
+
+class Dog extends Animal {
+  public void animalInstinct() { sysout("Dog Instinct")}
+}
+
+Q. How many methods Dog class has? 
+A: 1, since animalInstinct() method is same. this is called as Overriding of method. 
+
+Rules for Overriding
+-----------------------
+1. Names of the methods should be same 
+2. Number of arguments should be same
+3. sequence of arguments(data type) should be same
+4. Data type of arguments should be same. 
+
+ex. 
+void m1(int x)
+void m1(float x)
+
+Overriding? NO
+
+ex. 
+void m1(int x,float y)
+void m1(int y, float x)
+
+Overriding? YES
+
+Polymorphism
+-------------
+Means 'Multiple forms of an Object'
+
+Programmer Tip: Always prefer Polymorphism 
+
+super-class ref = sub-class object; 
+
+class A{} //super-class
+class B extends A{} //sub-class 
+
+A a=new A(); -- pure object of A 
+B b=new B(): -- Pure Object of B
+
+A a=new B(); -- polymorphism 
+
+where to use polymorphism?
+-- when we use collection classes, we must use polymorphism as they are created for it. 
+
+ex. Working with List 
+
+List list = new ArrayList(); -- polymorphic object 
+
+List :- super interface 
+ArrayLIst :- Sub-class 
+
+Calling a method Polymorphically
+================================
+If a method is called from a polymorphic object, we follow following 2 rules 
+
+a. check if the method is present in super class
+
+if(present)
+  go to step 2
+else CF 
+
+b. Check if the method is overrided in the sub class
+
+if(overrided) 
+  call sub-class version 
+else 
+ call super-class version 
+
+keywords
+========
+1. final 
+
+a. final class
+b. final method
+c. final variables 
+
+a. final class
+
+public final class MyClass{ }
+
+Rule:- Final class cannot be inherited(extended)
+
+public OtherClass extends MyClass{ } -- CF, MyClass is final, cannot be extended 
+
+b. final method
+
+public class MyClass{
+   public final void myMethod(){ ... }
+}
+
+Rule:- If a method is marked as final, it cannot be overrided. 
+
+public OtherClass extends MyClass{ 
+   public void myMethod(){ ... } --CF- cannot override final method 	
+}
+
+c. final variable 
+
+public class MyClass{ 
+   final int id; //CF 
+   public void myMethod(){ ... }
+}
+
+Rule 1: final variables has to be initialized by the programmer. 
+Rule 2: Once initialized, u cannot re-assign the value
+
+class Geometry{
+  final float pi=3.14F; 
+  
+  void computeAreaOfCircle(float r){
+    pi=3.14F; //CF
+    float area = pi * r * r;  
+    sysout("accurate area " + area)
+  }
+}
+
+ex. 
+/* final */ class A{
+	final int x=10; //0
+	/* final */ void m1() {
+		// x=10; -- CF
+		System.out.println("m1 in A");
+		System.out.println(x);
+	}
+}
+
+class B extends A{
+	 void m1() {
+		System.out.println("m1 in A");
+	}
+}
+
+
+
+

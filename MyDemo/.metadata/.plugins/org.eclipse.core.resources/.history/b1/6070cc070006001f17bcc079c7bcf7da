@@ -1,0 +1,77 @@
+package com.controller;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Scanner;
+
+import com.exception.PolicyNotFoundException;
+import com.model.Policy;
+import com.service.PolicyService;
+
+public class ClientController {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		PolicyService policyService = new PolicyService();
+		
+		while(true) {
+			System.out.println("      Welcome Client");
+			System.out.println("-------------------------- ");
+			System.out.println("1. List all Policies");
+			System.out.println("2. Buy a Policy");
+			System.out.println("3. Claim a Policy");
+			System.out.println("4. Check Claim Status");
+			System.out.println("5. My Policy");
+			System.out.println("0. Exit");
+			
+			int choice = sc.nextInt();
+			if(choice == 0)
+				break;
+			
+			switch(choice) {
+			case 1:
+				System.out.println("All Policies");
+				
+				List<Policy> list = null;
+				try {
+					list = policyService.getAllPolicies();
+				} catch (SQLException | PolicyNotFoundException e) {
+					System.out.println(e.getMessage());
+				}
+				System.out.println(list);
+				
+				break;
+				
+			case 2:
+				System.out.println("Enter Policy Id");
+				int id = sc.nextInt();
+				
+				Policy policy1 = null;
+				try {
+					policy1 = policyService.getPolicy(id);
+					double amount = policy1.getPolicyCost();
+					
+					System.out.println("Total Amount:"+amount);
+					System.out.println("Shall we proceed to payment?:(y/n)");
+					String c = sc.next();
+					if(c.equalsIgnoreCase("n"))
+						break;
+					
+					
+				} catch (SQLException | PolicyNotFoundException e) {
+					System.out.println(e.getMessage());
+				}
+				System.out.println(policy1.toString());
+				
+				break;
+
+			}
+		}
+	}
+
+	public static void clientMenu(String username, String password) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

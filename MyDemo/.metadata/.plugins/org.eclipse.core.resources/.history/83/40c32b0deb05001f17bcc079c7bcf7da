@@ -1,0 +1,41 @@
+package com.dao;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import com.exception.PolicyNotFoundException;
+import com.model.Policy;
+
+public class PolicyDaoImpl implements PolicyDao{
+
+	@Override
+	public boolean createPolicy(Policy policy) throws SQLException, PolicyNotFoundException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Policy getPolicy(int policyId) throws SQLException, PolicyNotFoundException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Policy> getAllPolicies() throws SQLException, PolicyNotFoundException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean updatePolicy(Policy updatedPolicy) throws SQLException, PolicyNotFoundException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean deletePolicy(int policyId) throws SQLException, PolicyNotFoundException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

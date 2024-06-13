@@ -1,0 +1,100 @@
+package com.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.exception.PolicyNotFoundException;
+import com.model.Policy;
+import com.model.Reservation;
+import com.utility.DBConnection;
+
+public class PolicyDaoImpl implements PolicyDao{
+
+	@Override
+	public boolean createPolicy(Policy policy) throws SQLException, PolicyNotFoundException {
+		// open connection
+		Connection con = DBConnection.dbConnect();
+
+		String sql = "insert into policy(policy_id, policy_name, policy_cost) "
+				+ "values (?, ?, ?)";
+
+		// prepare statement
+		PreparedStatement pstmt = con.prepareStatement(sql);
+
+		// attach the data
+		pstmt.setInt(1, policy.getPolicyId());
+		pstmt.setString(2, policy.getPolicyName());
+		pstmt.setDouble(3, policy.getPolicyCost());
+		
+		// execute the query
+		int status = pstmt.executeUpdate();
+
+		// close db connection
+		DBConnection.dbClose();
+
+		return status == 1 ? true : false;
+	}
+
+	@Override
+	public Policy getPolicy(int policyId) throws SQLException, PolicyNotFoundException {
+		Connection con = DBConnection.dbConnect();
+		String sql = "select * from policy where policy_id = ?";
+		
+		PreparedStatement pstmt = con.prepareStatement(sql);
+		pstmt.setInt(1, policyId);
+		
+		ResultSet rst = pstmt.executeQuery();
+		
+		while (rst.next()) {
+			int id = rst.getInt("policy_id");
+			String name = rst.getString("policy_name");
+			Double cost = rst.getDouble("policy_cost");
+			
+			Policy policy = new Policy(id, name, cost);
+			list.add(reservation);
+		}
+		DBConnection.dbClose();
+		return list;
+	}
+
+	@Override
+	public List<Policy> getAllPolicies() throws SQLException, PolicyNotFoundException {
+		Connection con = DBConnection.dbConnect();
+		String sql = "select * from reservation";
+		PreparedStatement pstmt = con.prepareStatement(sql);
+
+		ResultSet rst = pstmt.executeQuery();
+		List<Reservation> list = new ArrayList<>();
+		while (rst.next()) {
+			int id = rst.getInt("reservation_id");
+			String startDate = rst.getString("reservation_start_date");
+			String endDate = rst.getString("reservation_end_date");
+			double totalCost = rst.getDouble("reservation_total_cost");
+			String status = rst.getString("reservation_status");
+			int cId = rst.getInt("customer_id");
+			int vId = rst.getInt("vehicle_id");
+			int aId = rst.getInt("admin_id");
+			Reservation reservation = new Reservation(cId, vId, id, startDate, endDate, totalCost, status, aId);
+			list.add(reservation);
+		}
+		DBConnection.dbClose();
+		return list;
+	}
+
+	@Override
+	public boolean updatePolicy(Policy updatedPolicy) throws SQLException, PolicyNotFoundException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean deletePolicy(int policyId) throws SQLException, PolicyNotFoundException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

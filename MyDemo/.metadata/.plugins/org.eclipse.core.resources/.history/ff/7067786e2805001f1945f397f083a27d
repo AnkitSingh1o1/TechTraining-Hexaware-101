@@ -1,0 +1,12 @@
+package com.dao;
+
+import com.model.Customer;
+
+public interface ICustomerServiceProvider {
+
+	float getAccountBalance(long accountNumber);
+	float deposit(long accountNumber, float amount);
+	float withdraw(long accountNumber, float amount);
+	int transfer(long from_account_no, long to_account_no, float amount);
+	Customer getAccountDetails(long account_no);
+}

@@ -1,0 +1,52 @@
+package com.service;
+
+import java.sql.SQLException;
+
+import com.dao.ICustomerServiceProvider;
+import com.dao.ICustomerServiceProviderImpl;
+import com.dto.AccountAndCustomer;
+import com.exception.InsufficientFundException;
+import com.exception.InvalidAccountException;
+import com.exception.OverDraftLimitExcededException;
+import com.model.Account;
+
+
+public class ICustomerService {
+
+	ICustomerServiceProvider dao = new ICustomerServiceProviderImpl();
+
+	public float getAccountBalance(long accountNumber) throws SQLException, InvalidAccountException {
+		return dao.getAccountBalance(accountNumber);
+	}
+
+	public int deposit(long accountNumber, float amount) throws SQLException, InvalidAccountException {
+		return dao.deposit(accountNumber, amount);
+	}
+
+	public int withdraw(long accountNumber, float amount) throws SQLException, InvalidAccountException, InsufficientFundException, OverDraftLimitExcededException {
+		return dao.withdraw(accountNumber, amount);
+	}
+
+	public int transfer(long fromAccountNumber, long toAccountNumber1, float amount) throws SQLException, InvalidAccountException, InsufficientFundException, OverDraftLimitExcededException {
+		int withdrawStatus = dao.withdraw(fromAccountNumber, amount);
+		int depositStatus = dao.deposit(toAccountNumber1, amount);
+		
+		return withdrawStatus & depositStatus;
+	}
+
+	public AccountAndCustomer  getAccountDetails(long accountNumber1111) throws SQLException, InvalidAccountException {
+		return dao.getAccountDetails(accountNumber1111);
+	}
+
+	public Account getDetails(long accountNumber) throws SQLException, InvalidAccountException {
+		return dao.getDetails(accountNumber);
+	}
+
+	public boolean isValidForInterest(long accountNumber) {
+		Account account = dao.getDetails(accountNumber);
+		if(!account.getAccount_type().equalsIgnoreCase("savings"))
+			throw new InvalidAccountException("Can only credit into Saving Account, therefore failed");
+	}
+	
+	
+}

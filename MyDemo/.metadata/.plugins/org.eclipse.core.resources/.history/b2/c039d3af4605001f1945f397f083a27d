@@ -1,0 +1,13 @@
+package com.dto;
+
+public class AccountAndCustomer {
+	private int account_id;
+	private String account_type;
+	private double account_balance;
+	private int customer_id;
+	private String customer_first_name;
+	private String customer_last_name;
+	private String customer_dob;
+	
+
+}

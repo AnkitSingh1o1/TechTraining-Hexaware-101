@@ -1,0 +1,14 @@
+package com.service;
+
+import com.dao.PaymentDao;
+import com.dao.PaymentDaoImpl;
+import com.model.Payment;
+
+public class PaymentService {
+
+	PaymentDao dao = new PaymentDaoImpl();
+	public int save(Payment p) {
+		return dao.save(p);
+	}
+
+}

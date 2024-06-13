@@ -1,0 +1,63 @@
+package com.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.exception.InsufficientFundException;
+import com.exception.InvalidAccountException;
+import com.exception.OverDraftLimitExcededException;
+import com.model.Account;
+import com.model.Customer;
+import com.utility.DBConnection;
+
+public class ICustomerServiceProviderImpl implements ICustomerServiceProvider{
+
+	@Override
+	public float getAccountBalance(long accountNumber) throws SQLException, InvalidAccountException {
+		Connection con = DBConnection.dbConnect();
+		String sql = "select * from Account where account_id = ?";
+		PreparedStatement pstmt = con.prepareStatement(sql);
+		pstmt.setLong(1, accountNumber);
+
+		ResultSet rst = pstmt.executeQuery();
+		float balance = rst.getFloat("account_balance");
+		
+		DBConnection.dbClose();
+		return balance;
+	}
+
+	@Override
+	public float deposit(long accountNumber, float amount) throws SQLException, InvalidAccountException {
+		Connection con = DBConnection.dbConnect();
+		String sql = "select account_balance from account where account_id = ?";
+		
+		PreparedStatement pstmt = con.prepareStatement(sql);
+		pstmt.setLong(1, "account_id");
+		
+	}
+
+	@Override
+	public float withdraw(long accountNumber, float amount)
+			throws SQLException, InvalidAccountException, InsufficientFundException, OverDraftLimitExcededException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int transfer(long from_account_no, long to_account_no, float amount)
+			throws SQLException, InvalidAccountException, InsufficientFundException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Customer getAccountDetails(long account_no) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

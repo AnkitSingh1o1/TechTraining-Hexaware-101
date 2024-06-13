@@ -1,0 +1,15 @@
+package com.dao;
+
+import java.sql.SQLException;
+
+import com.model.Payment;
+
+public class PaymentDaoImpl implements PaymentDao{
+
+	@Override
+	public int save(Payment payment) throws SQLException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+}

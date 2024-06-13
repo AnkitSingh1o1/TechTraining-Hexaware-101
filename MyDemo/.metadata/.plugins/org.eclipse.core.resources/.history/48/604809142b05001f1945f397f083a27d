@@ -1,0 +1,70 @@
+package com.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.model.Account;
+import com.model.Customer;
+import com.model.Reservation;
+import com.utility.DBConnection;
+
+public class IBankServiceProviderImpl implements IBankServiceProvider{
+
+	@Override
+	public int createAccount(Customer customer, long accNo, String accType, float balance) throws SQLException {
+		Connection con = DBConnection.dbConnect();
+
+		String sql = "insert into customer(customer_id, "
+				+ "customer_first_name, "
+				+ "customer_last_name, "
+				+ "customer_dob) values(?, ?, ?, ?)";
+
+		// prepare statement
+		PreparedStatement pstmt = con.prepareStatement(sql);
+		pstmt.setInt(1, customer.getCustomer_id());
+		pstmt.setString(2, customer.getCustomer_first_name());
+		pstmt.setString(3, customer.getCustomer_last_name());
+		pstmt.setString(4, customer.getCustomer_dob());
+		
+		// execute the query
+		int status = pstmt.executeUpdate();
+
+		// close db connection
+		DBConnection.dbClose();
+
+		return status;
+		
+	}
+
+	@Override
+	public List<Account> listAccounts() throws SQLException {
+		Connection con = DBConnection.dbConnect();
+		String sql = "select * from Account";
+		PreparedStatement pstmt = con.prepareStatement(sql);
+
+		ResultSet rst = pstmt.executeQuery();
+		List<Account> list = new ArrayList<>();
+		while (rst.next()) {
+			int id = rst.getInt("account_id");
+			String type = rst.getString("account_type");
+			float balance = rst.getFloat("account_balance");
+			int customerId = rst.getInt("customer_id");
+			
+			Account account = new Account(id, type, balance, customerId)
+			list.add(account);
+		}
+		DBConnection.dbClose();
+		return list;
+	}
+
+	@Override
+	public float calculateInterest() throws SQLException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+}

@@ -1,0 +1,701 @@
+Java Fundamentals 
+=================
+
+Classes and Objects 
+   - instance variables 
+   - heap and stack 
+   - creating objects 
+   - model classes 
+   - working with multiple objects 
+   - case studies 
+
+Inheritance & polymorphism 
+  - basics of inheritance 
+  - overriding of methods 
+  - polymorphism 
+  - case studies 
+
+Keywords
+  - final: class,method,variable
+  - static: method - utility case study 
+  - abstract class and method 
+  - case studies 
+
+Interface, Contructors and Encapsulation 
+
+Exception Handling 
+  - Throwing and catching unchecked exception 
+  - Throwing and catching Checked Exception
+
+Class and Method Access Specifiers
+
+- A class has 2 access specifiers 
+1. public : if a class is public, it can be accessed from all packages 
+2. default : if it is default, it can be accessed from within its own package 
+
+Programmer Tip: 
+a. Accessing a class means creating an Object 
+b. Always make sure that the class is public. keep it accesible to controllers. 
+
+- A method has 4 access specifiers 
+1. public : if the method is public, it can be called/accessed from the controller. 
+2. protected: if it is protected, it can be accessed from controler using sub-class object. So this is for inheritance. 
+3. default : if it is default, it can be accessed only within the same package 
+4. private : if it is private, it can be access only within same class
+
+Programmer Tip: 
+a. Always keep methods as public.  
+
+Creating an Object of a class 
+------------------------------
+BankService bankService = new BankService();
+
+BankService bankService: this is called as reference/variable/object
+new BankService() : Object 
+
+Working with Instance Variables
+===============================
+1. We create instance variables in class according to the attributes in DB table. 
+
+ex. 
+DB Table: 
+product(id,title,price,description)
+Java Model class: 
+public class Product {
+//id,title,price,description
+	private int id;
+	private String title;
+	private double price;
+	private String description;
+}
+
+2. We mark all variables as private to clamp down on any direct access. 
+ex. product.title   NOT ALLOWED 
+
+3. We offer getter and setter methods for these variables for controller and service 
+product.setId(1);
+product.getPrice()
+[Note: getters and setters can be auto-generated]
+
+
+How to work with model classes in Controller and Service
+--------------------------------------------------------
+Controller prepares the object and passes it on to the service class. 
+
+ex. 
+		//preparing the object
+		Product product = new Product();
+		product.setId(1);
+		product.setPrice(34000);
+		product.setTitle("Oppo Mobile");
+		product.setDescription("jkdjkj");
+
+		//pass it on to service 
+		product = productService.computeDiscount(product,discount);
+
+
+How does JVM maintain multiple objects in its Memory
+====================================================
+
+Stack 					Heap 
+-----
+Student student1:100X		100X:StudentObj:int(id):1  String(name):harry potter  int(age):21  double(percent):75.0
+Student student2:200X		200X:StudentObj:int(id):2  String(name):ronald weasley  int(age):22  double(percent):75.0
+Student student3:300X		300X:StudentObj:int(id):3  String(name):hermione granger  int(age):21  double(percent):90.0
+				400X:
+
+
+Rule: References go in the stack, objects go in the heap 
+
+Inheritance 
+===========
+- Suppose that you have class created in your project few months back. Now the requirement is to add some fields in that class. 
+
+ex. 
+class Product{  //created few months back 
+  int id; 
+  double price; 
+  String description; 
+}
+
+on the basis of this model, objects are present in the project 
+
+Now the new requirements wants us to add a field of rating in this class. 
+there are 2 ways to do this. 
+
+a. Alter the existing class, but problem is there are many objects already present in the project. So altering all of them would not be recommended. 
+b. Create a class(say ProductV1) and extend it with Product(Original class). This is called as inheritance. 
+
+class ProductV1 extends Product{
+  //all variables and methods of Product class come to ProductV1. 
+ 
+ int rating;  
+}
+
+Q. So how many variables productV1 has? 
+A: 4 variables. 
+Q. Do we have to change tProduct class Object in the project? 
+A: No
+Q. If you want to work with Product class henceforth in your project which class will you work with? 
+A: ProductV1
+
+terminologies: 
+-------------
+Product: super class 
+ProductV1: sub class 
+
+Q. Lets say after few months, a new requirement wants us to create 'productWeight' variable in ProductV1 class. What would you do?
+A: We will create ProductV2 class that will extend ProductV1
+
+class ProductV2 extends ProductV1{ }
+
+
+Overriding the methods
+======================
+suppose that we have following class structure. 
+
+class Animal{
+   public void animalInstinct() { sysout("Animal Instinct")}
+}
+
+class Dog extends Animal {
+ 
+}
+
+Q. How many methods Dog sub-class has? 
+A: 1 (animalInstinct())
+
+Q. If i create an object of Sub class and call the method then, what will be the output?
+
+Dog dog = new Dog();
+dog.animalInstinct(); //Animal Instinct
+
+Q. what if I am not happy with the implementation of animalInstinct() method in the super class? what should I do? 
+A: I am not going to change or edit super class. Thats a Blunder!!!!!!!!  Instead I am going to re-implement that method in subclass. 
+
+class Dog extends Animal {
+  public void animalInstinct() { sysout("Dog Instinct")}
+}
+
+Q. How many methods Dog class has? 
+A: 1, since animalInstinct() method is same. this is called as Overriding of method. 
+
+Rules for Overriding
+-----------------------
+1. Names of the methods should be same 
+2. Number of arguments should be same
+3. sequence of arguments(data type) should be same
+4. Data type of arguments should be same. 
+
+ex. 
+void m1(int x)
+void m1(float x)
+
+Overriding? NO
+
+ex. 
+void m1(int x,float y)
+void m1(int y, float x)
+
+Overriding? YES
+
+Polymorphism
+-------------
+Means 'Multiple forms of an Object'
+
+Programmer Tip: Always prefer Polymorphism 
+
+super-class ref = sub-class object; 
+
+class A{} //super-class
+class B extends A{} //sub-class 
+
+A a=new A(); -- pure object of A 
+B b=new B(): -- Pure Object of B
+
+A a=new B(); -- polymorphism 
+
+where to use polymorphism?
+-- when we use collection classes, we must use polymorphism as they are created for it. 
+
+ex. Working with List 
+
+List list = new ArrayList(); -- polymorphic object 
+
+List :- super interface 
+ArrayLIst :- Sub-class 
+
+Calling a method Polymorphically
+================================
+If a method is called from a polymorphic object, we follow following 2 rules 
+
+a. check if the method is present in super class
+
+if(present)
+  go to step 2
+else CF 
+
+b. Check if the method is overrided in the sub class
+
+if(overrided) 
+  call sub-class version 
+else 
+ call super-class version 
+
+keywords
+========
+1. final 
+
+a. final class
+b. final method
+c. final variables 
+
+a. final class
+
+public final class MyClass{ }
+
+Rule:- Final class cannot be inherited(extended)
+
+public OtherClass extends MyClass{ } -- CF, MyClass is final, cannot be extended 
+
+b. final method
+
+public class MyClass{
+   public final void myMethod(){ ... }
+}
+
+Rule:- If a method is marked as final, it cannot be overrided. 
+
+public OtherClass extends MyClass{ 
+   public void myMethod(){ ... } --CF- cannot override final method 	
+}
+
+c. final variable 
+
+public class MyClass{ 
+   final int id; //CF 
+   public void myMethod(){ ... }
+}
+
+Rule 1: final variables has to be initialized by the programmer. 
+Rule 2: Once initialized, u cannot re-assign the value
+
+class Geometry{
+  final float pi=3.14F; 
+  
+  void computeAreaOfCircle(float r){
+    pi=3.14F; //CF
+    float area = pi * r * r;  
+    sysout("accurate area " + area)
+  }
+}
+
+ex. 
+/* final */ class A{
+	final int x=10; //0
+	/* final */ void m1() {
+		// x=10; -- CF
+		System.out.println("m1 in A");
+		System.out.println(x);
+	}
+}
+
+class B extends A{
+	 void m1() {
+		System.out.println("m1 in A");
+	}
+}
+
+
+static keyword
+===============
+static means belongs to the class. 
+
+static method
+-------------
+- static methods cannot be overrided 
+- static methods can be accessed directly using class name. 
+
+Ex. take fname and lname from the user as Input. append them. and return full name. 
+In controller, 
+String fullName = staticDemoService.getFullName(fname,lname);
+
+In Service, 
+public String getFullName(String fname, String lname) {
+		String name = NameUtility.generateName(fname, lname);
+		return name;
+	}
+
+In Utility, 
+public static String generateName(String fname,
+			String lname) {
+		return fname.trim().concat(" ")
+				.concat(lname.trim());
+	}
+
+for full example, refer git :- StaticDemoController
+
+
+Programmer Tip:- When there is a common operation in the project that can be used by many programmers, we can create a Utility class and mark a method as stic so that all programmers can call that using class name which will prevent creating multiple objects of that class. 
+
+Other than utility, static methods should not be created anywhere else in the project. 
+
+
+abstract keyword
+================
+
+Rule 1: abstract methods do not have a body and must end with a semicolon. 
+  public abstract void m1(); 
+
+Rule 2:- abstract methods can only be written in an abstract class 
+  public abstract class MyClass{
+	public abstract void m1(); 
+  } 
+
+Rule 3:- Cannot create an object(instantiation) of an abstract class. 
+
+ex:- 
+In sale process, the story goes like this, 
+1. The customer, confirms the order by pressing BUY button. 
+1.1 Check if the purchased products are ready to be dispatches to customers address 
+
+2. This must redirect customer to payment page which must show total amount to be paid and payment options
+3. customer selects payment option which must redict it to payment gateway page
+4. after processing is done, the customer must come back to order completion page 
+
+
+public abstract class SaleProcess {
+	public abstract void processOrder(List<Product> products);
+	public abstract boolean readyToDispatch(List<Product> products);  
+
+}
+In Service class, programmers need to implement these classes:- 
+
+public class SaleProcessService extends SaleProcess{
+
+	@Override
+	public void processOrder(List<Product> products) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean readyToDispatch(List<Product> products) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+}
+
+Programmer Tips: 
+- From stories, we create technical specs. 
+- there specs are methods that do not have any body and are marked as abstract. 
+
+public abstract class SaleProcess {
+	public abstract void processOrder(List<Product> products);
+	public abstract boolean readyToDispatch(List<Product> products);  
+}
+
+- These abstact classes are then extends by service class and the methods are implemented/overrided. 
+
+public class SaleProcessService extends SaleProcess{
+
+	@Override
+	public void processOrder(List<Product> products) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean readyToDispatch(List<Product> products) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+}
+
+- finally in controller, we create a polymorphic object to call these methods 
+
+SaleProcess saleProcessService = new SaleProcessService();
+
+
+Interfacing
+===========
+Interface are similar to bastract class. 
+1. All methods in interface by default are public and abstract. 
+
+public  interface SaleProcess {
+	 void processOrder(List<Product> products);
+	 boolean readyToDispatch(List<Product> products);  
+}
+
+for JVM,
+ public abstract void processOrder(List<Product> products);
+
+2. We need to implement the interface 
+
+public class SaleProcessService implements SaleProcess
+
+
+Constructor
+==========
+- Contructors are used to initialize instance variables of the class. 
+
+ex:- 
+public class Policy {
+	private int id;
+	private String name;
+	private int age;
+	private int duration;
+	private double premium;
+}
+
+contructor to initialize policy class variables will be:- 
+public Policy(int id, String name, int age, int duration, double premium) {
+		this.id = id;
+		this.name = name;
+		this.age = age;
+		this.duration = duration;
+		this.premium = premium;
+	}
+
+
+However, if the programmer want, they can also assign values to instance variables of the object using setters as shown below: 
+
+Policy p3 = new Policy(); 
+		p3.setId(3);
+		p3.setName("Jeevan Aayog");
+		p3.setDuration(20);
+		p3.setPremium(22000);
+		p3.setAge(18);
+
+But for this, we must also create a No-Arg contructor in the class. 
+
+public Policy() { }
+
+so eventually for allowing both the options, policy class must have both these constructors. 
+
+Programmer Tip: -  In every model class, u must have default, and parameterized constructor all the time. 
+
+
+Overriding toString method
+==========================
+- when we display the object, JVM calls toString() method and displays the content inside it. 
+
+If toString() is not overrided then it prints object locations 
+
+----------All Policies-------------
+com.model.Policy@ea4a92b
+com.model.Policy@3c5a99da
+com.model.Policy@47f37ef1
+com.model.Policy@5a01ccaa
+
+If we override toString(), 
+
+@Override
+	public String toString() {
+		return "Policy [id=" + id + ", name=" + name + ", age=" + age + ", duration=" + duration + ", premium="
+				+ premium + "]";
+	}
+The same output will look like, 
+
+----------All Policies-------------
+Policy [id=1, name=Jeevan Anand, age=21, duration=30, premium=30000.0]
+Policy [id=2, name=Jeevan Suraksha, age=30, duration=25, premium=20000.0]
+Policy [id=3, name=Jeevan Aayog, age=18, duration=20, premium=22000.0]
+Policy [id=4, name=Jeevan Labh, age=1, duration=40, premium=10000.0]
+
+Programmer tip:- Always override toString() whenever you create a model class. 
+
+Encapsulation
+=============
+encapsulation means, clamping down direct access of instance variables of model classes. 
+
+public class Policy {  //encapsulated class 
+	private int id;
+	private String name;
+	private int age;
+	private int duration;
+	private double premium;
+}
+
+To allow classes access on these variables, we must provide getters and setters
+
+public int getId() {   //getter
+		return id;
+	}
+
+public void setId(int id) { //setter
+		this.id = id;
+	}
+
+Exception Handling 
+===================
+- Exceptions are used to work with validations. 
+- Programmers working in service layers will throw exception when an unwanted scenario (Invalid scenario) is encountered.
+
+Tip:- Service throws an Exception, where as controller handles the exception 
+
+throw new RuntimeException("0 is not allowed"); //this is how u can throw an exception 
+
+alternatively, 
+
+RuntimeException re = new RuntimeException("0 is not allowed");
+throw re;
+
+IN Controller, 
+try {
+	int ans = arithmeticService.multipleGivenNumbers(3,0,5,7,2,8);
+	System.out.println("Ans is " +ans);
+    }
+catch(RuntimeException re) {
+	System.out.println(re.getMessage());
+    }
+
+
+Throwing a checked Exception
+----------------------------
+Rule 1: You must declare the exception to be thrown before throwing any checked exception.
+
+ex:- 
+public int multipleGivenNumbers(int... n) throws Exception {
+	   int res=1;
+		for(int e:n) {
+			if(e == 0)
+				throw new Exception("0 is not allowed"); 
+			res = res * e;
+	    }
+		return res;
+	}
+
+
+IN Controller:- 
+
+try {
+	int ans = arithmeticService.multipleGivenNumbers(3,0,5,7,2,8);
+	System.out.println("Ans is " +ans);
+	} 
+catch (Exception e) {
+	System.out.println(e.getMessage());
+}
+
+Programmer Tip:- Always throw a checked exception from service class so that controller can auto generate try-catch block. 
+If controller is not notifies about the exception thrown in service class, it will not handle that exception. 
+
+
+Case Study: 
+-----------
+Read n marks from User and compute grade acccording to following rule: 
+
+percent > 75: A
+        > 60: B
+        > 45: C
+            : D
+
+Validations: 
+if marks of any subject is greater than marks>100, then display "Marks cannot be over 100". 
+if marks of any subject is less than 0, marks<0, then display "Marks cannot be negative" 
+
+if total_marks > (100*n), then display "Invalid total marks given". 
+
+if n=4, then total_marks cannot go beyond 400. 
+
+Programmer Tip:- Always create custom exceptions in projects and throw them from service class for validation conditions.   
+
+Java Collections
+================
+
+List 
+ - ArrayList
+ - Vector
+ - LinkedList 
+
+Map
+ - HashMap
+ - Hashtable
+ - LinkedHashMap 
+
+Set
+ - TreeSet
+ - HashSet 
+
+
+ArrayList
+=========
+You can create arraylist object in 2 possible ways 
+
+1. pure object
+ArrayList alist =new ArrayList<>(); 
+2. polymorphic -- preferred 
+List plist =new ArrayList<>();
+
+We can add as many elements as we list in arraylist. there is no limit 
+
+List<Integer> list =new ArrayList<>(); //add as many as u like  
+		list.add(1);
+		list.add(4);
+		list.add(5);
+
+list.add(null); : can add null but do not sort it else u get NullPointerException
+
+/* Getting individual element from the list */
+		System.out.println(list.get(2));
+
+We can sort and search the list as well: 
+
+/* Sort this list */
+		Collections.sort(list);
+		System.out.println(list);
+
+/* Search the element in the list  */
+		System.out.println(Collections.binarySearch(list, 11)>0 ?"Present": "Not present");
+
+Working with Objects in List
+============================
+
+Car car1 = new Car(1,"MH-02 6654",LocalDate.of(2022, 02, 4), "Maruti Suzuki","Ertiga",1250000);
+Car car2 = new Car(2,"MH-04 4487",LocalDate.of(2019, 06, 14), "Tata","Altroz",1150000);
+Car car3 = new Car(3,"MH-12 2316",LocalDate.of(2020, 03, 15), "Renaut","Kiger",750000);
+		
+		List<Car> list = new ArrayList<>();
+		list.add(car1);
+		list.add(car2);
+		list.add(car3);
+
+- car objects added to the list above. 
+
+Now to sort this list, we need to use Comparator interface and provide comparison logic in compare() method 
+
+ex: 
+class A implements Comparator<Car>{
+
+	@Override
+	public int compare(Car c1, Car c2) {   //[34,67]
+		if(c1.getPrice() < c2.getPrice()) {
+			return -1;
+		}
+		if(c1.getPrice() > c2.getPrice()) { //[45,34] 
+			return 1; //swap
+		}
+		if(c1.getPrice() > c2.getPrice()) { //[23,23]
+			return 0;
+		}
+			
+		return 0;
+	}
+	//if you want me to swap: return any positive number(1)
+	//if you want me to do nothing, return any -ve number (-1)
+	//if you have same values in comparision, return 0. 
+}
+
+for CS: refer CarController.java from git 
+
+
+Connecting to the DB using JDBC API
+===================================
+
+
+
+
+
+
+

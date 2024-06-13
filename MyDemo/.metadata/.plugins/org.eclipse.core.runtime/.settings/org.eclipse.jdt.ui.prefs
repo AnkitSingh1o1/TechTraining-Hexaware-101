@@ -1,0 +1,9 @@
+content_assist_disabled_computers=org.eclipse.jdt.ui.textProposalCategory\u0000org.eclipse.jdt.ui.javaPostfixProposalCategory\u0000org.eclipse.jdt.ui.javaAllProposalCategory\u0000org.eclipse.jdt.ui.javaTypeProposalCategory\u0000org.eclipse.jdt.ui.javaNoTypeProposalCategory\u0000org.eclipse.jdt.ui.javaChainProposalCategory\u0000
+content_assist_lru_history=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><history maxLHS\="100" maxRHS\="10"><lhs name\="com.model.Account"><rhs name\="com.model.Account"/></lhs><lhs name\="com.dto.AccountAndCustomer"><rhs name\="com.dto.AccountAndCustomer"/></lhs><lhs name\="com.model.Address"><rhs name\="com.model.Address"/></lhs><lhs name\="com.model.Customer"><rhs name\="com.model.Customer"/></lhs><lhs name\="com.dao.ICustomerServiceProvider"><rhs name\="com.dao.ICustomerServiceProviderImpl"/></lhs><lhs name\="com.service.UserService"><rhs name\="com.service.UserService"/></lhs><lhs name\="com.model.Policy"><rhs name\="com.model.Policy"/></lhs><lhs name\="com.dao.PolicyDao"><rhs name\="com.dao.PolicyDaoImpl"/></lhs><lhs name\="com.model.Payment"><rhs name\="com.model.Payment"/></lhs><lhs name\="com.dao.ClientDao"><rhs name\="com.dao.ClientDaoImpl"/></lhs><lhs name\="com.dao.PaymentDao"><rhs name\="com.dao.PaymentDaoImpl"/></lhs></history>
+content_assist_number_of_computers=15
+eclipse.preferences.version=1
+org.eclipse.jdt.ui.formatterprofiles.version=23
+spelling_locale_initialized=true
+typefilter_migrated_2=true
+useAnnotationsPrefPage=true
+useQuickDiffPrefPage=true

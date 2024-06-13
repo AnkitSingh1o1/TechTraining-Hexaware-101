@@ -1,0 +1,97 @@
+package com.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.exception.InsufficientFundException;
+import com.exception.InvalidAccountException;
+import com.exception.OverDraftLimitExcededException;
+import com.model.Account;
+import com.model.Customer;
+import com.utility.DBConnection;
+
+public class ICustomerServiceProviderImpl implements ICustomerServiceProvider{
+
+	@Override
+	public float getAccountBalance(long accountNumber) throws SQLException, InvalidAccountException {
+		Connection con = DBConnection.dbConnect();
+		String sql = "select * from Account where account_id = ?";
+		PreparedStatement pstmt = con.prepareStatement(sql);
+		pstmt.setLong(1, accountNumber);
+
+		ResultSet rst = pstmt.executeQuery();
+		float balance = rst.getFloat("account_balance");
+		
+		DBConnection.dbClose();
+		return balance;
+	}
+
+	@Override
+	public int deposit(long accountNumber, float amount) throws SQLException, InvalidAccountException {
+		Connection con = DBConnection.dbConnect();
+		
+		//get current amount in that account
+		float currAmount = getAccountBalance(accountNumber);
+		
+		
+		String sql = "update account " 
+		+ "set accountBalance = ?"
+		+"where account_id = ?";
+
+		// prepare statement
+		PreparedStatement pstmt = con.prepareStatement(sql);
+		pstmt.setFloat(1, amount+currAmount);
+		pstmt.setFloat(2, accountNumber);
+		
+		int status = pstmt.executeUpdate(); // 1 - updates/ 0 - not updated
+
+		DBConnection.dbClose();
+		return status;
+		
+	}
+
+	@Override
+	public int withdraw(long accountNumber, float amount)
+			throws SQLException, InvalidAccountException, InsufficientFundException, OverDraftLimitExcededException {
+		Connection con = DBConnection.dbConnect();
+		
+		//get current amount in that account
+		float currAmount = getAccountBalance(accountNumber);
+		
+		if(currAmount < amount) {
+			throw new InsufficientFundException(null);
+		}
+		
+		String sql = "update account " 
+		+ "set accountBalance = ?"
+		+"where account_id = ?";
+
+		// prepare statement
+		PreparedStatement pstmt = con.prepareStatement(sql);
+		pstmt.setFloat(1, amount+currAmount);
+		pstmt.setFloat(2, accountNumber);
+		
+		int status = pstmt.executeUpdate(); // 1 - updates/ 0 - not updated
+
+		DBConnection.dbClose();
+		return status;
+	}
+
+	@Override
+	public int transfer(long from_account_no, long to_account_no, float amount)
+			throws SQLException, InvalidAccountException, InsufficientFundException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Customer getAccountDetails(long account_no) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

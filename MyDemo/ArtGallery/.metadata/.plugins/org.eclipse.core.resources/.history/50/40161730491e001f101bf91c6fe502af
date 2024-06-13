@@ -1,0 +1,22 @@
+package com.model;
+
+public class Atemp {
+	
+	public static void main(String[] args) {
+		
+	}
+}
+
+class A{
+	public void fun() {
+		System.out.println("in Atemp");
+	}
+}
+
+class B extends A{
+	public void fun() {
+		System.out.println("in B");
+	}
+}
+
+

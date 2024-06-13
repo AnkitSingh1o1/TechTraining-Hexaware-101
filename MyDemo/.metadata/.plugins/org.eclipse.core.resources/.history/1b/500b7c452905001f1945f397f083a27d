@@ -1,0 +1,57 @@
+package com.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
+
+import com.model.Account;
+import com.model.Customer;
+import com.utility.DBConnection;
+
+public class IBankServiceProviderImpl implements IBankServiceProvider{
+
+	@Override
+	public int createAccount(Customer customer, long accNo, String accType, float balance) throws SQLException {
+		Connection con = DBConnection.dbConnect();
+
+		String sql = "INSERT INTO Reservation (reservation_id, reservation_start_date,"
+				+ "reservation_end_date,reservation_total_cost, reservation_status,"
+				+ " customer_id, vehicle_id, admin_id) VALUES(?,?,?,?,?,?,?,?)";
+
+		// prepare statement
+		PreparedStatement pstmt = con.prepareStatement(sql);
+
+		// attach the data
+		pstmt.setInt(1, reservation.getReservation_id());
+		pstmt.setString(2, reservation.getReservation_start_date());
+		pstmt.setString(3, reservation.getReservation_end_date());
+		pstmt.setDouble(4, reservation.getReservation_total_cost());
+		pstmt.setString(5, reservation.getReservation_status());
+		pstmt.setInt(6, reservation.getCustomer_id());
+		pstmt.setInt(7, reservation.getVehicle_id());
+		pstmt.setInt(8, reservation.getAdmin_id());
+
+		// execute the query
+		int status = pstmt.executeUpdate();
+
+		// close db connection
+		DBConnection.dbClose();
+
+		return status;
+		
+	}
+
+	@Override
+	public List<Account> listAccounts() throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public float calculateInterest() throws SQLException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+}
